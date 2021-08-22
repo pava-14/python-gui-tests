@@ -15,39 +15,41 @@ class GroupHelper:
     def add_new_group(self, name):
         self.open_group_editor()
         self.group_editor.window(auto_id="uxNewAddressButton").click()
-        input = self.group_editor.window(class_name="Edit")
-        input.set_text(name)
-        input.type_keys("\n")
+        self.set_text_to_edit(name)
         self.close_group_editor()
 
     def delete_first_matched_group_by_name(self, name):
         self.open_group_editor()
+        if self.select_first_matched_group_by_name(name):
+            self.group_editor.window(auto_id="uxDeleteAddressButton").click()
+            window_delete_group = self.app.application.window(title="Delete group")
+            # window_delete_group.window(auto_id="uxDeleteAllRadioButton").click_input()
+            window_delete_group.Button.click()
+            # window_delete_group.window(auto_id="uxOKAddressButton").click()
+            window_delete_group.Button3.click()
+        self.close_group_editor()
+
+    def select_first_matched_group_by_name(self, group_name):
+        is_selected = False
         tree = self.group_editor.window(auto_id="uxAddressTreeView")
         root = tree.tree_root()
         for node in root.children():
-            if node.text() == name:
+            if node.text() == group_name:
                 node.select()
-                self.group_editor.window(auto_id="uxDeleteAddressButton").click()
-                window_delete_group = self.app.application.window(title="Delete group")
-                # window_delete_group.window(auto_id="uxDeleteAllRadioButton").click_input()
-                window_delete_group.Button.click()
-                # window_delete_group.window(auto_id="uxOKAddressButton").click()
-                window_delete_group.Button3.click()
+                is_selected = True
                 break
-        self.close_group_editor()
+        return is_selected
+
+    def set_text_to_edit(self, text):
+        input = self.group_editor.window(class_name="Edit")
+        input.set_text(text)
+        input.type_keys("\n")
 
     def edit_first_matched_group_by_name(self, old_name, new_name):
         self.open_group_editor()
-        tree = self.group_editor.window(auto_id="uxAddressTreeView")
-        root = tree.tree_root()
-        for node in root.children():
-            if node.text() == old_name:
-                node.select()
-                self.group_editor.window(auto_id="uxEditAddressButton").click()
-                input = self.group_editor.window(class_name="Edit")
-                input.set_text(new_name)
-                input.type_keys("\n")
-                break
+        if self.select_first_matched_group_by_name(old_name):
+            self.group_editor.window(auto_id="uxEditAddressButton").click()
+            self.set_text_to_edit(new_name)
         self.close_group_editor()
 
     def open_group_editor(self):
