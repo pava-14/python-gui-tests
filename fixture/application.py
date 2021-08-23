@@ -16,3 +16,4 @@ class Application:
 
     def destroy(self):
         self.main_window.close()
+
