@@ -4,9 +4,7 @@ import random
 
 
 def test_edit_group(app):
-    old_groups = app.groups.get_group_list()
-    if len(old_groups) == 0:
-        app.groups.add_new_group("my test group")
+    app.groups.check_for_groups()
     old_groups = app.groups.get_group_list()
     group_name = random.choice(old_groups)
     new_group_name = "Edited Group"

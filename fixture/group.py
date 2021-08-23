@@ -62,3 +62,8 @@ class GroupHelper:
 
     def close_group_editor(self):
         self.group_editor.close()
+
+    def check_for_groups(self):
+        old_groups = self.app.groups.get_group_list()
+        if len(old_groups) == 0:
+            self.app.groups.add_new_group("my test group")
