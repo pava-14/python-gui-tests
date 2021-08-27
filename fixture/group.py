@@ -67,3 +67,5 @@ class GroupHelper:
         old_groups = self.app.groups.get_group_list()
         if len(old_groups) == 0:
             self.app.groups.add_new_group("my test group")
+            old_groups = self.app.groups.get_group_list()
+        return old_groups
